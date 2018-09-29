@@ -90,7 +90,9 @@
     `(~obj ~@lst))
 
   (defn car [lst]
-    (first lst))
+    (if (null lst)
+        nil
+        (first lst)))
 
   (defn cdr [lst]
     (cut lst 1))

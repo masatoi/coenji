@@ -1,3 +1,17 @@
 * Coenji
 Tiny Hy utilities for Common Lispers
 
+* Usage
+#+BEGIN_SRC hy
+(eval-and-compile
+  (import [coenji.utils [*]])
+  (require [coenji.utils [*]]))
+
+(defn collect-factorial [n i result]
+  (if (= i n)
+      (cdr (nreverse result))
+      (collect-factorial n (inc i) (cons (* (car result) i) result))))
+
+(p (car '()))
+;; => '(1 2 6 24 120 720 5040 40320 362880)
+#+END_SRC
