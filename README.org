@@ -7,11 +7,13 @@ Tiny Hy utilities for Common Lispers
   (import [coenji.utils [*]])
   (require [coenji.utils [*]]))
 
-(defn collect-factorial [n i result]
-  (if (= i n)
-      (cdr (nreverse result))
-      (collect-factorial n (inc i) (cons (* (car result) i) result))))
+(defn collect-factorial [n]
+  (defn inner [n i result]
+    (if (= i n)
+        (cdr (nreverse result))
+        (inner n (inc i) (cons (* (car result) i) result))))
+  (inner n 1 '(1)))
 
-(p (car '()))
+(p (collect-factorial 10))
 ;; => '(1 2 6 24 120 720 5040 40320 362880)
 #+END_SRC
