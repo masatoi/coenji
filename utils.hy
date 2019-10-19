@@ -75,7 +75,7 @@
   (defn remove-if-not [func iterable]
     (list (filter func iterable)))
 
-  (setv nil (HyExpression ()))
+  (setv nil (HyExpression '()))
 
   (defn null [ls]
     (= nil ls))
