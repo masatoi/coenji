@@ -64,6 +64,12 @@
   (defmacro decf [n &optional [delta 1]]
     `(setv ~n (- ~n ~delta)))
 
+  (defn 1+ [n]
+    (+ n 1))
+
+  (defn 1- [n]
+    (- n 1))
+
 ;;; List functions
 
   (defn apply [func &rest args-last-elem-lst]
