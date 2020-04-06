@@ -153,8 +153,8 @@
       (import itertools)
       (for [el ls]
         (unless (= (len el) 2)
-          (raise SyntaxError))
-        (itertools.chain.from-iterable ls)))
+          (raise SyntaxError)))
+      (itertools.chain.from-iterable ls))
     `((fn []
         (setv ~@(flatten-var-pairs var-pairs))
         ~@body)))
