@@ -9,9 +9,10 @@
 (eval-and-compile
 ;;; Print utilities
   (defn p [&rest objs] 
-    (print #*(lfor obj objs (hy.contrib.hy-repr.hy-repr obj))))
+    (print #*(lfor obj objs (hy.contrib.hy-repr.hy-repr obj)))
+    (last objs))
 
-  (deftag ? [code]
+  (deftag > [code]
     `(do (print (hy.contrib.hy-repr.hy-repr '~code) " => " ~code) ~code))
 
   (defmacro timeit [&rest body]
