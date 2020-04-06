@@ -150,12 +150,11 @@
 
   (defmacro let* [var-pairs &rest body]
     (defn flatten-var-pairs [ls]
-      (setv acc '())
+      (import itertools)
       (for [el ls]
         (unless (= (len el) 2)
           (raise SyntaxError))
-        (nconc acc el))
-      acc)
+        (itertools.chain.from-iterable ls)))
     `((fn []
         (setv ~@(flatten-var-pairs var-pairs))
         ~@body)))
