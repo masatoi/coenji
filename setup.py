@@ -10,7 +10,7 @@ if sys.version_info < (3, 4):
 ROOT_DIR = path.abspath(path.dirname(__file__))
 sys.path.insert(0, ROOT_DIR)
 
-LONG_DESCRIPTION = open(path.join(ROOT_DIR, 'README.rst')).read()
+LONG_DESCRIPTION = open(path.join(ROOT_DIR, 'README.org')).read()
 # version
 here = os.path.dirname(os.path.abspath(__file__))
 version = next((line.split('=')[1].strip().replace("'", '')
@@ -36,7 +36,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords='hy lisp common-lisp',
-    install_requires=['hy>=0.15.0'],
+    install_requires=['hy>=0.20.0'],
     packages=['coenji'],
     package_data={'coenji': HYSRC},
     platforms='any',

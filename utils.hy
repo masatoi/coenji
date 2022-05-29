@@ -7,14 +7,16 @@
 (require [hy.contrib.loop [*]])
 
 (eval-and-compile
-;;; Print utilities
+  ;;; Print utilities
   (defn p [&rest objs] 
     (print #*(lfor obj objs (hy.contrib.hy-repr.hy-repr obj)))
     (last objs))
 
+  ;;; debug-print
   (deftag > [code]
     `(do (print (hy.contrib.hy-repr.hy-repr '~code) " => " ~code) ~code))
 
+  ;;; time macro
   (defmacro timeit [&rest body]
     (setv start (gensym 'start)
           end   (gensym 'end))
@@ -165,4 +167,4 @@
     `((fn []
         (setv ~@(flatten-var-pairs var-pairs))
         ~@body)))
-)
+  )
