@@ -4,8 +4,8 @@ import os
 from os import path
 from setuptools import setup
 
-if sys.version_info < (3, 4):
-    sys.exit('coenji requires Python 3.4 or higher')
+if sys.version_info < (3, 9):
+    sys.exit('coenji requires Python 3.9 or higher')
 
 ROOT_DIR = path.abspath(path.dirname(__file__))
 sys.path.insert(0, ROOT_DIR)
@@ -31,12 +31,10 @@ setup(
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.9',
     ],
     keywords='hy lisp common-lisp',
-    install_requires=['hy==0.27.0'],
+    install_requires=['hy==0.27.0', 'hyrule==0.4.0', 'toolz==0.12.0'],
     packages=['coenji'],
     package_data={'coenji': HYSRC},
     platforms='any',

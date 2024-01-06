@@ -34,7 +34,7 @@
     (= (name (type obj))
        (name objtype)))
 
-;;; Identical functions
+  ;;; Identical functions
 
   (defn eq [x y]
     (is x y))
@@ -42,7 +42,7 @@
   (defn equal [x y]
     (= x y))
 
-;;; Numerical functions
+  ;;; Numerical functions
 
   (defn mod [n m]
     (% n m))
@@ -77,7 +77,7 @@
   (defn 1- [n]
     (- n 1))
 
-;;; List functions
+  ;;; List functions
 
   (defn butlast [lst]
     (cut lst None -1))
@@ -143,7 +143,7 @@
     (.extend x y)
     x)
 
-;;; Macros
+  ;;; Macros
 
   (defmacro progn [#* body]
     `(do ~@body))
