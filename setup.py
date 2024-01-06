@@ -36,7 +36,7 @@ setup(
         'Programming Language :: Python :: 3.6',
     ],
     keywords='hy lisp common-lisp',
-    install_requires=['hy>=0.20.0'],
+    install_requires=['hy==0.27.0'],
     packages=['coenji'],
     package_data={'coenji': HYSRC},
     platforms='any',

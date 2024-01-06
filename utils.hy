@@ -1,30 +1,34 @@
 ;;; -*- coding:utf-8; mode:hy; -*-
 
-(import [time [time sleep]]
-        [pydoc [apropos]]
-        [hy.contrib.hy-repr [hy-repr]])
+(import time [time sleep]
+        pydoc [apropos]
+        hy.core.hy-repr [hy-repr]
+        toolz [first second last])
 
-(require [hy.contrib.loop [*]])
+(require hyrule [loop
+                 unless
+                 defmacro/g!
+                 assoc
+                 ->])
 
 (eval-and-compile
   ;;; Print utilities
-  (defn p [&rest objs] 
-    (print #*(lfor obj objs (hy.contrib.hy-repr.hy-repr obj)))
+  (defn p [#* objs]
+    (print #*(lfor obj objs (hy-repr obj)))
     (last objs))
 
   ;;; debug-print
-  (deftag > [code]
-    `(do (print (hy.contrib.hy-repr.hy-repr '~code) " => " ~code) ~code))
+  (defreader >
+    (setv code (.parse-one-form &reader))
+    `(do (print (hy-repr '~code) " => " ~code) ~code))
 
   ;;; time macro
-  (defmacro timeit [&rest body]
-    (setv start (gensym 'start)
-          end   (gensym 'end))
+  (defmacro/g! timeit [#* body]
     `(do
-       (setv ~start (time))
+       (setv g!start (time))
        ~@body
-       (setv ~end (time))
-       (print (+ (.format "Evaluation took: {0}" (- ~end ~start)) " seconds"))))
+       (setv g!end (time))
+       (print (+ (.format "Evaluation took: {0}" (- g!end g!start)) " seconds"))))
 
   (defn typep [obj objtype]
     (= (name (type obj))
@@ -61,10 +65,10 @@
   (defn divisible [n m]
     (zerop (mod n m)))
 
-  (defmacro incf [n &optional [delta 1]]
+  (defmacro incf [n [delta 1]]
     `(setv ~n (+ ~n ~delta)))
 
-  (defmacro decf [n &optional [delta 1]]
+  (defmacro decf [n [delta 1]]
     `(setv ~n (- ~n ~delta)))
 
   (defn 1+ [n]
@@ -75,16 +79,20 @@
 
 ;;; List functions
 
-  (defn apply [func &rest args-last-elem-lst]
-    (func #*(+ (list (butlast args-last-elem-lst)) (last args-last-elem-lst))))
+  (defn butlast [lst]
+    (cut lst None -1))
 
-  (defn mapcar [func &rest iterables]
-    (list (map func #*iterables)))
+  (defn apply [func #* args-last-elem-lst]
+    (func #*(+ (list (butlast args-last-elem-lst))
+               (last args-last-elem-lst))))
+
+  (defn mapcar [func #* iterables]
+    (list (map func #* iterables)))
 
   (defn remove-if-not [func iterable]
     (list (filter func iterable)))
 
-  (setv nil (HyExpression '()))
+  (setv nil (hy.models.Expression '()))
 
   (defn null [ls]
     (= nil ls))
@@ -92,8 +100,8 @@
   (defmacro nilf [x]
     `(setv ~x nil))
 
-  (defn lst [&rest args]
-    (HyExpression args))
+  (defn lst [#* args]
+    (hy.models.Expression args))
 
   (defn cons [obj lst]
     `(~obj ~@lst))
@@ -104,7 +112,7 @@
         (first lst)))
 
   (defn cdr [lst]
-    (cut lst 1))
+    (cut lst 1 None None))
 
   (defn caar [lst]
     (-> lst car car))
@@ -118,13 +126,13 @@
   (defn cdar [lst]
     (-> lst car cdr))
 
-  (defmacro push (elem lst)
+  (defmacro push [elem lst]
     `(setv ~lst (cons ~elem ~lst)))
 
   (defn append [ls1 ls2]
     (+ ls1 ls2))
 
-  (defmacro subseq [sequence start &optional end]
+  (defmacro subseq [sequence start [end None]]
     `(cut ~sequence ~start ~end))
 
   (defn nreverse [ls]
@@ -137,34 +145,18 @@
 
 ;;; Macros
 
-  (defmacro progn [&rest body]
+  (defmacro progn [#* body]
     `(do ~@body))
 
-  (defmacro! prog1 [&rest body]
+  (defmacro/g! prog1 [#* body]
     `(progn
        (setv ~g!sexp-1 ~(car body))
        (progn
          ~@(cdr body)
          ~g!sexp-1)))
 
-  (defmacro pop (lst)
+  (defmacro pop [lst]
     `(prog1
        (car ~lst)
        (setv ~lst (cdr ~lst))))
-
-  (defmacro let [var-pairs &rest body]
-    (setv var-names (list (map first  var-pairs))
-          var-vals  (list (map second var-pairs)))
-    `((fn [~@var-names] ~@body) ~@var-vals))
-
-  (defmacro let* [var-pairs &rest body]
-    (defn flatten-var-pairs [ls]
-      (import itertools)
-      (for [el ls]
-        (unless (= (len el) 2)
-          (raise SyntaxError)))
-      (itertools.chain.from-iterable ls))
-    `((fn []
-        (setv ~@(flatten-var-pairs var-pairs))
-        ~@body)))
   )
